@@ -1,0 +1,32 @@
+  --non-interactive is not supported, use $CI=1 instead
+Starting project at /home/ubuntu/herco_project
+(node:5048) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Starting Metro Bundler
+The following packages should be updated for best compatibility with the installed expo version:
+  react-native@0.73.4 - expected version: 0.73.6
+Your project may not work correctly until you install the correct versions of the packages.
+Waiting on http://localhost:8081
+Logs for your project will appear below.
+Web Bundled 6010ms (node_modules/expo/AppEntry.js)
+Error: ENOENT: no such file or directory, open './assets/favicon.png'
+    at Object.openSync (node:fs:562:18)
+    at readFileSync (node:fs:446:35)
+    at calculateHash (/home/ubuntu/herco_project/node_modules/@expo/image-utils/src/Cache.ts:13:73)
+    at createCacheKey (/home/ubuntu/herco_project/node_modules/@expo/image-utils/src/Cache.ts:19:16)
+    at Object.createCacheKeyWithDirectoryAsync (/home/ubuntu/herco_project/node_modules/@expo/image-utils/src/Cache.ts:28:31)
+    at Object.generateImageAsync (/home/ubuntu/herco_project/node_modules/@expo/image-utils/src/Image.ts:182:32)
+    at Object.getFaviconFromExpoConfigAsync (/home/ubuntu/herco_project/node_modules/@expo/cli/src/export/favicon.ts:78:24)
+    at FaviconMiddleware.handleRequestAsync (/home/ubuntu/herco_project/node_modules/@expo/cli/src/start/server/middleware/FaviconMiddleware.ts:29:20)
+    at internalMiddleware (/home/ubuntu/herco_project/node_modules/@expo/cli/src/start/server/middleware/ExpoMiddleware.ts:44:16)
+Web Bundled 20ms (node_modules/expo/AppEntry.js)
+Error: ENOENT: no such file or directory, open './assets/favicon.png'
+    at Object.openSync (node:fs:562:18)
+    at readFileSync (node:fs:446:35)
+    at calculateHash (/home/ubuntu/herco_project/node_modules/@expo/image-utils/src/Cache.ts:13:73)
+    at createCacheKey (/home/ubuntu/herco_project/node_modules/@expo/image-utils/src/Cache.ts:19:16)
+    at Object.createCacheKeyWithDirectoryAsync (/home/ubuntu/herco_project/node_modules/@expo/image-utils/src/Cache.ts:28:31)
+    at Object.generateImageAsync (/home/ubuntu/herco_project/node_modules/@expo/image-utils/src/Image.ts:182:32)
+    at Object.getFaviconFromExpoConfigAsync (/home/ubuntu/herco_project/node_modules/@expo/cli/src/export/favicon.ts:78:24)
+    at FaviconMiddleware.handleRequestAsync (/home/ubuntu/herco_project/node_modules/@expo/cli/src/start/server/middleware/FaviconMiddleware.ts:29:20)
+    at internalMiddleware (/home/ubuntu/herco_project/node_modules/@expo/cli/src/start/server/middleware/ExpoMiddleware.ts:44:16)
