@@ -1,15 +1,15 @@
 import { createClient } from '@supabase/supabase-js';
 
 // Configuration Supabase
-const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL || 'https://your-project.supabase.co';
-const SUPABASE_ANON_KEY = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || 'your-anon-key';
+const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL || 'https://tsiwhingmchlxcpvrjvw.supabase.co';
+const SUPABASE_ANON_KEY = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || '';
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ─── USERS ──────────────────────────────────────────────
 export const fetchUsers = async () => {
   try {
-    const { data, error } = await supabase.from('users').select('*');
+    const { data, error } = await supabase.from('app_users').select('*');
     if (error) throw error;
     return data;
   } catch (error) {
@@ -18,21 +18,10 @@ export const fetchUsers = async () => {
   }
 };
 
-export const createUser = async (user) => {
-  try {
-    const { data, error } = await supabase.from('users').insert([user]);
-    if (error) throw error;
-    return data;
-  } catch (error) {
-    console.error('Error creating user:', error);
-    return null;
-  }
-};
-
 // ─── PRODUCTS ───────────────────────────────────────────
 export const fetchProducts = async () => {
   try {
-    const { data, error } = await supabase.from('products').select('*');
+    const { data, error } = await supabase.from('products').select('*, categories(*)');
     if (error) throw error;
     return data;
   } catch (error) {
@@ -60,7 +49,7 @@ export const fetchOrders = async (limit = 100) => {
   try {
     const { data, error } = await supabase
       .from('orders')
-      .select('*')
+      .select('*, order_items(*)')
       .order('created_at', { ascending: false })
       .limit(limit);
     if (error) throw error;
@@ -71,27 +60,35 @@ export const fetchOrders = async (limit = 100) => {
   }
 };
 
-export const createOrder = async (order) => {
+export const createOrder = async (orderData, items) => {
   try {
-    const { data, error } = await supabase.from('orders').insert([order]);
-    if (error) throw error;
-    return data;
+    // 1. Create the order
+    const { data: order, error: orderError } = await supabase
+      .from('orders')
+      .insert([orderData])
+      .select()
+      .single();
+    
+    if (orderError) throw orderError;
+
+    // 2. Create the order items
+    const orderItems = items.map(item => ({
+      order_id: order.id,
+      product_id: item.id,
+      product_name: item.name,
+      quantity: item.qty,
+      unit_price: item.priceTTC
+    }));
+
+    const { error: itemsError } = await supabase
+      .from('order_items')
+      .insert(orderItems);
+    
+    if (itemsError) throw itemsError;
+
+    return order;
   } catch (error) {
     console.error('Error creating order:', error);
-    return null;
-  }
-};
-
-export const updateOrderStatus = async (orderId, status) => {
-  try {
-    const { data, error } = await supabase
-      .from('orders')
-      .update({ status })
-      .eq('id', orderId);
-    if (error) throw error;
-    return data;
-  } catch (error) {
-    console.error('Error updating order status:', error);
     return null;
   }
 };
@@ -99,7 +96,7 @@ export const updateOrderStatus = async (orderId, status) => {
 // ─── TABLES ─────────────────────────────────────────────
 export const fetchTables = async () => {
   try {
-    const { data, error } = await supabase.from('tables').select('*');
+    const { data, error } = await supabase.from('restaurant_tables').select('*');
     if (error) throw error;
     return data;
   } catch (error) {
@@ -111,7 +108,7 @@ export const fetchTables = async () => {
 export const updateTableStatus = async (tableId, status) => {
   try {
     const { data, error } = await supabase
-      .from('tables')
+      .from('restaurant_tables')
       .update({ status })
       .eq('id', tableId);
     if (error) throw error;
@@ -124,7 +121,7 @@ export const updateTableStatus = async (tableId, status) => {
 
 // ─── REAL-TIME SUBSCRIPTIONS ────────────────────────────
 export const subscribeToOrders = (callback) => {
-  const subscription = supabase
+  return supabase
     .channel('orders')
     .on(
       'postgres_changes',
@@ -132,53 +129,15 @@ export const subscribeToOrders = (callback) => {
       (payload) => callback(payload)
     )
     .subscribe();
-
-  return subscription;
 };
 
 export const subscribeToTables = (callback) => {
-  const subscription = supabase
-    .channel('tables')
+  return supabase
+    .channel('restaurant_tables')
     .on(
       'postgres_changes',
-      { event: '*', schema: 'public', table: 'tables' },
+      { event: '*', schema: 'public', table: 'restaurant_tables' },
       (payload) => callback(payload)
     )
     .subscribe();
-
-  return subscription;
-};
-
-// ─── ANALYTICS ──────────────────────────────────────────
-export const fetchDailySales = async (date) => {
-  try {
-    const { data, error } = await supabase
-      .from('orders')
-      .select('*')
-      .gte('created_at', `${date}T00:00:00`)
-      .lte('created_at', `${date}T23:59:59`);
-    if (error) throw error;
-    return data;
-  } catch (error) {
-    console.error('Error fetching daily sales:', error);
-    return [];
-  }
-};
-
-export const fetchMonthlySales = async (year, month) => {
-  try {
-    const startDate = `${year}-${String(month).padStart(2, '0')}-01`;
-    const endDate = new Date(year, month, 0).toISOString().split('T')[0];
-    
-    const { data, error } = await supabase
-      .from('orders')
-      .select('*')
-      .gte('created_at', `${startDate}T00:00:00`)
-      .lte('created_at', `${endDate}T23:59:59`);
-    if (error) throw error;
-    return data;
-  } catch (error) {
-    console.error('Error fetching monthly sales:', error);
-    return [];
-  }
 };
