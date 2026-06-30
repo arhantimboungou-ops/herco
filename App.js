@@ -2,6 +2,8 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { View, StyleSheet, StatusBar } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import RoleSelectionScreen from './src/screens/RoleSelectionScreen';
+import SuperAdminScreen from './src/screens/SuperAdminScreen';
 import TenantSelectionScreen from './src/screens/TenantSelectionScreen';
 import { LoginScreen } from './src/screens/LoginScreen';
 import { DashboardScreen } from './src/screens/DashboardScreen';
@@ -9,12 +11,17 @@ import { Colors } from './src/theme/colors';
 import { USERS, PRODUCTS, TABLES, CATEGORIES } from './src/services/initialData';
 
 export default function App() {
+  const [userRole, setUserRole] = useState(null); // 'superadmin' ou 'client'
   const [currentTenant, setCurrentTenant] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
   const [currentScreen, setCurrentScreen] = useState('dashboard');
   const [orders, setOrders] = useState([]);
   const [products, setProducts] = useState(PRODUCTS);
   const [tables, setTables] = useState(TABLES);
+
+  const handleRoleSelected = useCallback((role) => {
+    setUserRole(role);
+  }, []);
 
   const handleTenantSelected = useCallback((tenant) => {
     setCurrentTenant(tenant);
@@ -27,10 +34,12 @@ export default function App() {
 
   const handleLogout = useCallback(() => {
     setCurrentUser(null);
-    setCurrentScreen('login');
+    setCurrentTenant(null);
+    setUserRole(null);
   }, []);
 
-  const handleBackToTenantSelection = useCallback(() => {
+  const handleBackToRoleSelection = useCallback(() => {
+    setUserRole(null);
     setCurrentTenant(null);
     setCurrentUser(null);
   }, []);
@@ -40,51 +49,64 @@ export default function App() {
   }, []);
 
   const renderScreen = useMemo(() => {
-    // Pas de société sélectionnée
-    if (!currentTenant) {
-      return <TenantSelectionScreen onTenantSelected={handleTenantSelected} />;
+    // Pas de rôle sélectionné
+    if (!userRole) {
+      return <RoleSelectionScreen onRoleSelected={handleRoleSelected} />;
     }
 
-    // Pas d'utilisateur connecté
-    if (!currentUser) {
-      return (
-        <LoginScreen
-          users={USERS}
-          onLogin={handleLogin}
-          onBack={handleBackToTenantSelection}
-          tenant={currentTenant}
-        />
-      );
+    // SUPER ADMIN
+    if (userRole === 'superadmin') {
+      return <SuperAdminScreen onLogout={handleLogout} />;
     }
 
-    // Utilisateur connecté - afficher le dashboard
-    switch (currentScreen) {
-      case 'dashboard':
+    // CLIENT
+    if (userRole === 'client') {
+      // Pas de société sélectionnée
+      if (!currentTenant) {
+        return <TenantSelectionScreen onTenantSelected={handleTenantSelected} />;
+      }
+
+      // Pas d'utilisateur connecté
+      if (!currentUser) {
         return (
-          <DashboardScreen
-            orders={orders}
-            products={products}
-            tables={tables}
-            onNavigate={handleNavigate}
-            onLogout={handleLogout}
+          <LoginScreen
+            users={USERS}
+            onLogin={handleLogin}
+            onBack={handleBackToRoleSelection}
             tenant={currentTenant}
-            user={currentUser}
           />
         );
-      default:
-        return (
-          <DashboardScreen
-            orders={orders}
-            products={products}
-            tables={tables}
-            onNavigate={handleNavigate}
-            onLogout={handleLogout}
-            tenant={currentTenant}
-            user={currentUser}
-          />
-        );
+      }
+
+      // Utilisateur connecté - afficher le dashboard
+      switch (currentScreen) {
+        case 'dashboard':
+          return (
+            <DashboardScreen
+              orders={orders}
+              products={products}
+              tables={tables}
+              onNavigate={handleNavigate}
+              onLogout={handleLogout}
+              tenant={currentTenant}
+              user={currentUser}
+            />
+          );
+        default:
+          return (
+            <DashboardScreen
+              orders={orders}
+              products={products}
+              tables={tables}
+              onNavigate={handleNavigate}
+              onLogout={handleLogout}
+              tenant={currentTenant}
+              user={currentUser}
+            />
+          );
+      }
     }
-  }, [currentTenant, currentUser, currentScreen, orders, products, tables]);
+  }, [userRole, currentTenant, currentUser, currentScreen]);
 
   return (
     <GestureHandlerRootView style={styles.container}>
