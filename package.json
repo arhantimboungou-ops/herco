@@ -8,8 +8,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "build": "expo export --platform web",
-    "build:prod": "expo export --platform web",
+    "build": "expo export -p web",
+    "install": "pnpm install",
     "lint": "eslint .",
     "test": "jest"
   },
