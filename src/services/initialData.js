@@ -1,0 +1,63 @@
+export const CATEGORIES = [
+  { id: 1, name: 'Plats Chauds', icon: '🍽️', color: '#F59E0B' },
+  { id: 2, name: 'Poissons', icon: '🐟', color: '#3B82F6' },
+  { id: 3, name: 'Grillades', icon: '🔥', color: '#EF4444' },
+  { id: 4, name: 'Entrées', icon: '🥗', color: '#10B981' },
+  { id: 5, name: 'Bières', icon: '🍺', color: '#FBBF24' },
+  { id: 6, name: 'Softs', icon: '🥤', color: '#8B5CF6' },
+  { id: 7, name: 'Alcools', icon: '🥃', color: '#06B6D4' },
+  { id: 8, name: 'Desserts', icon: '🍰', color: '#EC4899' },
+];
+
+export const PRODUCTS = [
+  { id: 1, catId: 1, name: 'Saka-Saka au Poisson', unit: 'Portion', costPrice: 1500, priceTTC: 3500, stock: 20, stockMin: 5, active: true },
+  { id: 2, catId: 1, name: 'Moambe Poulet', unit: 'Portion', costPrice: 2000, priceTTC: 4500, stock: 15, stockMin: 4, active: true },
+  { id: 3, catId: 1, name: 'Maboke Capitaine', unit: 'Portion', costPrice: 2500, priceTTC: 5500, stock: 10, stockMin: 3, active: true },
+  { id: 4, catId: 1, name: 'Riz Sauce Arachide', unit: 'Portion', costPrice: 1200, priceTTC: 3000, stock: 25, stockMin: 6, active: true },
+  { id: 5, catId: 1, name: 'Ntoba Mbinzo', unit: 'Portion', costPrice: 1800, priceTTC: 4000, stock: 12, stockMin: 3, active: true },
+  { id: 6, catId: 2, name: 'Capitaine Braisé', unit: 'Pièce', costPrice: 3000, priceTTC: 6500, stock: 8, stockMin: 2, active: true },
+  { id: 7, catId: 2, name: 'Silure Fumé', unit: 'Portion', costPrice: 2000, priceTTC: 4500, stock: 10, stockMin: 3, active: true },
+  { id: 8, catId: 2, name: 'Carpe Braisée', unit: 'Pièce', costPrice: 2200, priceTTC: 5000, stock: 8, stockMin: 2, active: true },
+  { id: 9, catId: 3, name: 'Poulet Braisé ½', unit: '½ Poulet', costPrice: 2500, priceTTC: 5500, stock: 15, stockMin: 4, active: true },
+  { id: 10, catId: 3, name: 'Poulet Entier', unit: 'Entier', costPrice: 4500, priceTTC: 10000, stock: 8, stockMin: 2, active: true },
+  { id: 11, catId: 3, name: 'Brochettes Bœuf', unit: 'Brochette', costPrice: 1200, priceTTC: 3000, stock: 20, stockMin: 5, active: true },
+  { id: 12, catId: 3, name: 'Côtes de Porc', unit: 'Portion', costPrice: 1800, priceTTC: 4500, stock: 12, stockMin: 3, active: true },
+  { id: 13, catId: 4, name: 'Salade Mixte', unit: 'Assiette', costPrice: 700, priceTTC: 2000, stock: 15, stockMin: 4, active: true },
+  { id: 14, catId: 4, name: 'Beignets Crevettes', unit: 'Assiette', costPrice: 1500, priceTTC: 3500, stock: 10, stockMin: 3, active: true },
+  { id: 15, catId: 5, name: 'Primus 65cl', unit: 'Bouteille', costPrice: 700, priceTTC: 1500, stock: 100, stockMin: 20, active: true },
+  { id: 16, catId: 5, name: 'Ngok 65cl', unit: 'Bouteille', costPrice: 700, priceTTC: 1500, stock: 80, stockMin: 20, active: true },
+  { id: 17, catId: 5, name: 'Beaufort 65cl', unit: 'Bouteille', costPrice: 700, priceTTC: 1500, stock: 60, stockMin: 15, active: true },
+  { id: 18, catId: 5, name: 'Guinness 60cl', unit: 'Bouteille', costPrice: 900, priceTTC: 2000, stock: 50, stockMin: 10, active: true },
+  { id: 19, catId: 5, name: 'Flag 65cl', unit: 'Bouteille', costPrice: 700, priceTTC: 1500, stock: 70, stockMin: 15, active: true },
+  { id: 20, catId: 6, name: 'Coca-Cola 50cl', unit: 'Bouteille', costPrice: 350, priceTTC: 800, stock: 100, stockMin: 20, active: true },
+  { id: 21, catId: 6, name: 'Fanta 50cl', unit: 'Bouteille', costPrice: 350, priceTTC: 800, stock: 80, stockMin: 15, active: true },
+  { id: 22, catId: 6, name: 'Eau Minérale 50cl', unit: 'Bouteille', costPrice: 200, priceTTC: 500, stock: 150, stockMin: 30, active: true },
+  { id: 23, catId: 6, name: 'Eau Minérale 1.5L', unit: 'Bouteille', costPrice: 400, priceTTC: 1000, stock: 100, stockMin: 20, active: true },
+  { id: 24, catId: 6, name: 'Jus de Fruits 1L', unit: 'Bouteille', costPrice: 600, priceTTC: 1500, stock: 40, stockMin: 10, active: true },
+  { id: 25, catId: 7, name: 'Whisky J&B verre', unit: 'Verre', costPrice: 1200, priceTTC: 3000, stock: 30, stockMin: 5, active: true },
+  { id: 26, catId: 7, name: "Gin Gordon's verre", unit: 'Verre', costPrice: 900, priceTTC: 2500, stock: 25, stockMin: 5, active: true },
+  { id: 27, catId: 7, name: 'Vin Rouge verre', unit: 'Verre', costPrice: 700, priceTTC: 2000, stock: 40, stockMin: 8, active: true },
+  { id: 28, catId: 8, name: 'Salade de Fruits', unit: 'Verrine', costPrice: 700, priceTTC: 2000, stock: 15, stockMin: 4, active: true },
+  { id: 29, catId: 8, name: 'Crème Caramel', unit: 'Verrine', costPrice: 500, priceTTC: 1500, stock: 10, stockMin: 3, active: true },
+];
+
+export const TABLES = [
+  { id: 1, name: 'T01', zone: 'Salle', cap: 4, status: 'libre' },
+  { id: 2, name: 'T02', zone: 'Salle', cap: 4, status: 'libre' },
+  { id: 3, name: 'T03', zone: 'Salle', cap: 6, status: 'libre' },
+  { id: 4, name: 'T04', zone: 'Salle', cap: 2, status: 'libre' },
+  { id: 5, name: 'T05', zone: 'Salle', cap: 4, status: 'libre' },
+  { id: 6, name: 'T06', zone: 'Salle', cap: 8, status: 'libre' },
+  { id: 7, name: 'P01', zone: 'Terrasse', cap: 4, status: 'libre' },
+  { id: 8, name: 'P02', zone: 'Terrasse', cap: 6, status: 'libre' },
+  { id: 9, name: 'B01', zone: 'Bar', cap: 2, status: 'libre' },
+  { id: 10, name: 'B02', zone: 'Bar', cap: 2, status: 'libre' },
+  { id: 11, name: 'B03', zone: 'Bar', cap: 2, status: 'libre' },
+  { id: 12, name: 'VIP1', zone: 'VIP', cap: 8, status: 'libre' },
+];
+
+export const USERS = [
+  { id: 1, name: 'Admin HERCO', pin: '1234', role: 'admin', active: true },
+  { id: 2, name: 'Caissier 1', pin: '0001', role: 'caissier', active: true },
+  { id: 3, name: 'Serveur 1', pin: '0002', role: 'serveur', active: true },
+];
