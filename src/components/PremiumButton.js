@@ -1,11 +1,19 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { Colors } from '../theme/colors';
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 
-export const PremiumButton = ({ title, onPress, style, textStyle, type = 'primary' }) => {
+export const PremiumButton = ({ 
+  title, 
+  onPress, 
+  style, 
+  textStyle, 
+  type = 'primary',
+  loading = false,
+  disabled = false,
+}) => {
   const scale = useSharedValue(1);
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -20,56 +28,78 @@ export const PremiumButton = ({ title, onPress, style, textStyle, type = 'primar
     scale.value = withSpring(1);
   };
 
+  const getButtonStyle = () => {
+    if (type === 'primary') return styles.primary;
+    if (type === 'secondary') return styles.secondary;
+    if (type === 'outline') return styles.outline;
+    if (type === 'danger') return styles.danger;
+    return styles.primary;
+  };
+
+  const getTextColor = () => {
+    if (type === 'outline') return Colors.accent;
+    return Colors.white;
+  };
+
   return (
     <AnimatedTouchableOpacity
       activeOpacity={0.8}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
       onPress={onPress}
+      disabled={disabled || loading}
       style={[
         styles.button,
-        type === 'primary' ? styles.primary : styles.secondary,
+        getButtonStyle(),
+        disabled && styles.disabled,
         style,
         animatedStyle,
       ]}
     >
-      <Text style={[styles.text, type === 'primary' ? styles.textPrimary : styles.textSecondary, textStyle]}>
-        {title}
-      </Text>
+      {loading ? (
+        <ActivityIndicator color={getTextColor()} />
+      ) : (
+        <Text style={[styles.text, { color: getTextColor() }, textStyle]}>
+          {title}
+        </Text>
+      )}
     </AnimatedTouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   button: {
-    paddingVertical: 14,
-    paddingHorizontal: 24,
-    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: Colors.black,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 3,
+    shadowColor: Colors.shadow,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 2,
   },
   primary: {
     backgroundColor: Colors.accent,
   },
   secondary: {
     backgroundColor: Colors.secondary,
-    borderWidth: 1,
-    borderColor: Colors.border,
+  },
+  outline: {
+    backgroundColor: Colors.white,
+    borderWidth: 1.5,
+    borderColor: Colors.accent,
+  },
+  danger: {
+    backgroundColor: Colors.danger,
   },
   text: {
-    fontSize: 16,
-    fontWeight: '700',
-    letterSpacing: 0.5,
+    fontSize: 14,
+    fontWeight: '600',
+    letterSpacing: 0.3,
   },
-  textPrimary: {
-    color: Colors.white,
-  },
-  textSecondary: {
-    color: Colors.white,
+  disabled: {
+    opacity: 0.5,
   },
 });
