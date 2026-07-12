@@ -7,16 +7,16 @@ import {
   TouchableOpacity,
   StatusBar,
   useWindowDimensions,
-  Alert,
+  ImageBackground,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { theme } from '../theme';
-import { Button, Card, Input } from '../components';
+import { colors, gradients } from '../theme/colors';
+import { Card, Button } from '../components';
 import { DEFAULT_USERS } from '../utils/constants';
 
 const LoginScreen = ({ onLogin }) => {
-  const { width, height } = useWindowDimensions();
-  const [step, setStep] = useState('user'); // 'user' ou 'pin'
+  const { width } = useWindowDimensions();
+  const [step, setStep] = useState('user');
   const [selectedUser, setSelectedUser] = useState(null);
   const [pin, setPin] = useState('');
   const [error, setError] = useState('');
@@ -36,351 +36,123 @@ const LoginScreen = ({ onLogin }) => {
       setError('');
       return;
     }
-
     if (pin.length >= 4) return;
-
     const newPin = pin + digit;
     setPin(newPin);
-
     if (newPin.length === 4) {
-      const user = DEFAULT_USERS.find(
-        u => u.id === selectedUser.id && u.pin === newPin && u.active
-      );
-
-      if (user) {
-        onLogin(user);
-      } else {
+      const user = DEFAULT_USERS.find(u => u.id === selectedUser.id && u.pin === newPin);
+      if (user) onLogin(user);
+      else {
         setError('PIN incorrect');
-        setTimeout(() => {
-          setPin('');
-          setError('');
-        }, 1000);
+        setTimeout(() => { setPin(''); setError(''); }, 1000);
       }
     }
   };
 
-  const handleBack = () => {
-    setStep('user');
-    setPin('');
-    setError('');
-    setSelectedUser(null);
-  };
-
   const pinKeys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '⌫', '0', '✓'];
 
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: theme.colors.background,
-    },
-    scrollContent: {
-      flexGrow: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    mainContainer: {
-      flex: 1,
-      width: '100%',
-      flexDirection: isTablet ? 'row' : 'column',
-      backgroundColor: theme.colors.background,
-    },
-    leftSection: {
-      flex: isTablet ? 1 : 0,
-      justifyContent: 'center',
-      alignItems: 'center',
-      paddingHorizontal: theme.spacing.xl,
-      paddingVertical: theme.spacing.xl,
-      borderRightWidth: isTablet ? 1 : 0,
-      borderRightColor: theme.colors.border,
-    },
-    rightSection: {
-      flex: isTablet ? 1 : 0,
-      justifyContent: 'center',
-      alignItems: 'center',
-      paddingHorizontal: theme.spacing.xl,
-      paddingVertical: theme.spacing.xl,
-    },
-    logo: {
-      fontSize: 48,
-      marginBottom: theme.spacing.lg,
-    },
-    title: {
-      fontSize: 32,
-      fontWeight: '700',
-      color: theme.colors.textPrimary,
-      marginBottom: theme.spacing.sm,
-      fontFamily: theme.typography.fontFamily.base,
-    },
-    subtitle: {
-      fontSize: 14,
-      color: theme.colors.textSecondary,
-      marginBottom: theme.spacing.xl,
-      fontFamily: theme.typography.fontFamily.base,
-    },
-    userCard: {
-      marginBottom: theme.spacing.md,
-      width: '100%',
-    },
-    userCardContent: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: theme.spacing.md,
-    },
-    userAvatar: {
-      width: 48,
-      height: 48,
-      borderRadius: theme.borderRadius.lg,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: theme.colors.primary,
-    },
-    userAvatarText: {
-      color: theme.colors.background,
-      fontWeight: '700',
-      fontSize: 18,
-    },
-    userInfo: {
-      flex: 1,
-    },
-    userName: {
-      fontSize: 16,
-      fontWeight: '600',
-      color: theme.colors.textPrimary,
-    },
-    userRole: {
-      fontSize: 12,
-      color: theme.colors.textSecondary,
-      marginTop: 2,
-    },
-    arrow: {
-      fontSize: 20,
-      color: theme.colors.textTertiary,
-    },
-    pinContainer: {
-      width: '100%',
-      maxWidth: 320,
-    },
-    backButton: {
-      marginBottom: theme.spacing.lg,
-    },
-    backText: {
-      color: theme.colors.primary,
-      fontSize: 13,
-      fontWeight: '600',
-    },
-    selectedUserCard: {
-      marginBottom: theme.spacing.lg,
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: theme.spacing.md,
-    },
-    selectedUserAvatar: {
-      width: 40,
-      height: 40,
-      borderRadius: theme.borderRadius.md,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: theme.colors.primary,
-    },
-    pinDots: {
-      flexDirection: 'row',
-      justifyContent: 'center',
-      gap: theme.spacing.md,
-      marginBottom: theme.spacing.lg,
-    },
-    pinDot: {
-      width: 12,
-      height: 12,
-      borderRadius: 6,
-      borderWidth: 2,
-      borderColor: theme.colors.border,
-      backgroundColor: 'transparent',
-    },
-    pinDotFilled: {
-      backgroundColor: theme.colors.primary,
-      borderColor: theme.colors.primary,
-    },
-    pinKeyboard: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      gap: theme.spacing.sm,
-      justifyContent: 'center',
-    },
-    pinKey: {
-      width: '30%',
-      aspectRatio: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: theme.borderRadius.md,
-      backgroundColor: theme.colors.surface,
-      borderWidth: 1,
-      borderColor: theme.colors.border,
-    },
-    pinKeyText: {
-      fontSize: 18,
-      fontWeight: '600',
-      color: theme.colors.textPrimary,
-    },
-    pinKeyDelete: {
-      backgroundColor: 'rgba(239, 68, 68, 0.1)',
-    },
-    pinKeyDeleteText: {
-      color: theme.colors.error,
-    },
-    errorText: {
-      color: theme.colors.error,
-      fontSize: 12,
-      textAlign: 'center',
-      marginBottom: theme.spacing.md,
-    },
-  });
-
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={theme.colors.background} />
-      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        <View style={styles.mainContainer}>
-          {/* Left Section - Branding */}
-          {isTablet && (
-            <View style={styles.leftSection}>
-              <View style={styles.logo}>🍽️</View>
-              <Text style={styles.title}>HERCO</Text>
-              <Text style={styles.subtitle}>Restaurant & Bar</Text>
-            </View>
-          )}
+    <View style={styles.container}>
+      <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
+      
+      {/* Background with a sophisticated gradient/overlay */}
+      <View style={styles.bgOverlay} />
 
-          {/* Right Section - Login */}
-          <View style={styles.rightSection}>
-            {!isTablet && (
-              <>
-                <View style={styles.logo}>🍽️</View>
-                <Text style={styles.title}>HERCO</Text>
-                <Text style={styles.subtitle}>Restaurant & Bar</Text>
-              </>
-            )}
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.content}>
+          <View style={styles.header}>
+            <Text style={styles.logo}>HERCO</Text>
+            <Text style={styles.logoSub}>RESTAURANT & BAR</Text>
+          </View>
 
+          <Card style={styles.loginCard}>
             {step === 'user' ? (
-              <View style={{ width: '100%', maxWidth: 320 }}>
-                <Text style={[styles.title, { marginBottom: theme.spacing.md }]}>Connexion</Text>
-                <Text style={[styles.subtitle, { marginBottom: theme.spacing.lg }]}>
-                  Sélectionnez votre profil
-                </Text>
-
-                {DEFAULT_USERS.filter(u => u.active).map(user => (
-                  <TouchableOpacity
-                    key={user.id}
-                    onPress={() => handleUserSelect(user)}
-                    style={styles.userCard}
-                  >
-                    <Card variant="surface" elevated>
-                      <View style={styles.userCardContent}>
-                        <View
-                          style={[
-                            styles.userAvatar,
-                            { backgroundColor: theme.colors.primary },
-                          ]}
-                        >
-                          <Text style={styles.userAvatarText}>
-                            {user.name.charAt(0)}
-                          </Text>
-                        </View>
-                        <View style={styles.userInfo}>
-                          <Text style={styles.userName}>{user.name}</Text>
-                          <Text style={styles.userRole}>
-                            {user.role === 'admin'
-                              ? 'Administrateur'
-                              : user.role === 'caissier'
-                              ? 'Caissier'
-                              : 'Serveur'}
-                          </Text>
-                        </View>
-                        <Text style={styles.arrow}>›</Text>
-                      </View>
-                    </Card>
+              <>
+                <Text style={styles.cardTitle}>Connexion</Text>
+                <Text style={styles.cardSubtitle}>Sélectionnez votre profil pour continuer</Text>
+                
+                {DEFAULT_USERS.map(user => (
+                  <TouchableOpacity key={user.id} onPress={() => handleUserSelect(user)} style={styles.userItem}>
+                    <View style={[styles.userAvatar, { backgroundColor: colors.primary + '20' }]}>
+                      <Text style={styles.avatarText}>{user.name.charAt(0)}</Text>
+                    </View>
+                    <View style={styles.userInfo}>
+                      <Text style={styles.userName}>{user.name}</Text>
+                      <Text style={styles.userRole}>{user.role.toUpperCase()}</Text>
+                    </View>
+                    <Text style={styles.chevron}>›</Text>
                   </TouchableOpacity>
                 ))}
-              </View>
+              </>
             ) : (
               <View style={styles.pinContainer}>
-                <TouchableOpacity
-                  onPress={handleBack}
-                  style={styles.backButton}
-                >
-                  <Text style={styles.backText}>‹ Retour</Text>
+                <TouchableOpacity onPress={() => setStep('user')} style={styles.backBtn}>
+                  <Text style={styles.backBtnText}>‹ Retour</Text>
                 </TouchableOpacity>
-
-                <Card variant="surface" elevated>
-                  <View style={styles.selectedUserCard}>
-                    <View
-                      style={[
-                        styles.selectedUserAvatar,
-                        { backgroundColor: theme.colors.primary },
-                      ]}
-                    >
-                      <Text style={styles.userAvatarText}>
-                        {selectedUser?.name.charAt(0)}
-                      </Text>
-                    </View>
-                    <View>
-                      <Text style={styles.userName}>{selectedUser?.name}</Text>
-                      <Text style={styles.userRole}>
-                        {selectedUser?.role === 'admin'
-                          ? 'Administrateur'
-                          : selectedUser?.role === 'caissier'
-                          ? 'Caissier'
-                          : 'Serveur'}
-                      </Text>
-                    </View>
+                
+                <View style={styles.selectedUser}>
+                  <View style={[styles.userAvatarSmall, { backgroundColor: colors.primary + '20' }]}>
+                    <Text style={styles.avatarTextSmall}>{selectedUser?.name.charAt(0)}</Text>
                   </View>
-                </Card>
-
-                <Text style={[styles.title, { fontSize: 18, marginTop: theme.spacing.lg, marginBottom: theme.spacing.md }]}>
-                  Code PIN
-                </Text>
+                  <Text style={styles.selectedUserName}>{selectedUser?.name}</Text>
+                </View>
 
                 <View style={styles.pinDots}>
-                  {[0, 1, 2, 3].map(i => (
-                    <View
-                      key={i}
-                      style={[
-                        styles.pinDot,
-                        pin.length > i && styles.pinDotFilled,
-                      ]}
-                    />
+                  {[0,1,2,3].map(i => (
+                    <View key={i} style={[styles.pinDot, pin.length > i && styles.pinDotFilled]} />
                   ))}
                 </View>
 
-                {error && <Text style={styles.errorText}>{error}</Text>}
+                {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
-                <View style={styles.pinKeyboard}>
+                <View style={styles.keyboard}>
                   {pinKeys.map(key => (
-                    <TouchableOpacity
-                      key={key}
-                      onPress={() => handlePinPress(key)}
-                      style={[
-                        styles.pinKey,
-                        key === '⌫' && styles.pinKeyDelete,
-                      ]}
-                      activeOpacity={0.7}
-                    >
-                      <Text
-                        style={[
-                          styles.pinKeyText,
-                          key === '⌫' && styles.pinKeyDeleteText,
-                        ]}
-                      >
-                        {key}
-                      </Text>
+                    <TouchableOpacity key={key} onPress={() => handlePinPress(key)} style={styles.key}>
+                      <Text style={[styles.keyText, key === '⌫' && { color: colors.error }]}>{key}</Text>
                     </TouchableOpacity>
                   ))}
                 </View>
               </View>
             )}
-          </View>
+          </Card>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: '#1E293B' },
+  bgOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(15, 23, 42, 0.8)' },
+  safeArea: { flex: 1 },
+  content: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24 },
+  header: { alignItems: 'center', marginBottom: 48 },
+  logo: { fontSize: 42, fontWeight: '900', color: '#FFF', letterSpacing: 4 },
+  logoSub: { fontSize: 12, color: 'rgba(255,255,255,0.6)', fontWeight: '700', letterSpacing: 2, marginTop: -4 },
+  loginCard: { width: '100%', maxWidth: 400, padding: 32, borderRadius: 24, backgroundColor: '#FFF' },
+  cardTitle: { fontSize: 24, fontWeight: '800', color: colors.textPrimary, marginBottom: 8 },
+  cardSubtitle: { fontSize: 14, color: colors.textSecondary, marginBottom: 32 },
+  userItem: { flexDirection: 'row', alignItems: 'center', paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: '#F1F5F9' },
+  userAvatar: { width: 50, height: 50, borderRadius: 15, justifyContent: 'center', alignItems: 'center', marginRight: 16 },
+  avatarText: { fontSize: 20, fontWeight: '800', color: colors.primary },
+  userInfo: { flex: 1 },
+  userName: { fontSize: 16, fontWeight: '700', color: colors.textPrimary },
+  userRole: { fontSize: 11, fontWeight: '700', color: colors.textTertiary, marginTop: 2 },
+  chevron: { fontSize: 24, color: '#CBD5E1' },
+  pinContainer: { width: '100%' },
+  backBtn: { marginBottom: 24 },
+  backBtnText: { color: colors.primary, fontWeight: '700' },
+  selectedUser: { flexDirection: 'row', alignItems: 'center', marginBottom: 32 },
+  userAvatarSmall: { width: 32, height: 32, borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginRight: 12 },
+  avatarTextSmall: { fontSize: 14, fontWeight: '800', color: colors.primary },
+  selectedUserName: { fontSize: 18, fontWeight: '700', color: colors.textPrimary },
+  pinDots: { flexDirection: 'row', justifyContent: 'center', gap: 16, marginBottom: 32 },
+  pinDot: { width: 14, height: 14, borderRadius: 7, borderWidth: 2, borderColor: '#E2E8F0' },
+  pinDotFilled: { backgroundColor: colors.primary, borderColor: colors.primary },
+  errorText: { color: colors.error, textAlign: 'center', marginBottom: 16, fontWeight: '600' },
+  keyboard: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 12 },
+  key: { width: '30%', aspectRatio: 1.2, justifyContent: 'center', alignItems: 'center', borderRadius: 12, backgroundColor: '#F8FAFC' },
+  keyText: { fontSize: 20, fontWeight: '700', color: colors.textPrimary },
+});
 
 export default LoginScreen;
