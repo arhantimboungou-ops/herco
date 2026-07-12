@@ -66,7 +66,7 @@ const AdminDashboard = ({ user, onLogout }) => {
               <Text style={styles.menuIcon}>📋</Text>
               <Text style={styles.menuText}>Commandes</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.menuItem}>
+            <TouchableOpacity style={styles.menuItem} onPress={onGoToInventory}>
               <Text style={styles.menuIcon}>📦</Text>
               <Text style={styles.menuText}>Inventaire</Text>
             </TouchableOpacity>
