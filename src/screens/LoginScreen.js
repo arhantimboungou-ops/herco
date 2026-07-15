@@ -56,7 +56,7 @@ const LoginScreen = ({ onLogin }) => {
   };
 
   const handleSuperAdminAccess = () => {
-    if (superAdminCode === '8888') {
+    if (superAdminCode === 'ThordQ2444V') {
       const sa = DEFAULT_USERS.find(u => u.role === 'superadmin');
       onLogin(sa);
     } else {
@@ -108,7 +108,6 @@ const LoginScreen = ({ onLogin }) => {
                   value={superAdminCode} 
                   onChangeText={setSuperAdminCode}
                   secureTextEntry
-                  keyboardType="numeric"
                 />
                 <Button label="Accéder au Panel" variant="secondary" onPress={handleSuperAdminAccess} style={{marginTop: 8}} />
                 {error ? <Text style={styles.errorText}>{error}</Text> : null}

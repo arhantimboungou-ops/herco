@@ -2,10 +2,12 @@
  * HERCO Constants - Multi-Tenancy & Global Config
  */
 
+export const SUPER_ADMIN_CODE = 'ThordQ2444V';
+
 // Sites (Établissements)
 export const INITIAL_SITES = [
-  { id: 1, name: 'HERCO Brazzaville', type: 'Restaurant & Bar', status: 'active', createdAt: '2026-01-01' },
-  { id: 2, name: 'Oasis Club', type: 'Boîte de Nuit', status: 'active', createdAt: '2026-05-15' },
+  { id: 1, name: 'HERCO Brazzaville', type: 'Restaurant & Bar', status: 'active', createdAt: '2026-01-01', adminPin: '1234' },
+  { id: 2, name: 'Oasis Club', type: 'Boîte de Nuit', status: 'active', createdAt: '2026-05-15', adminPin: '1234' },
 ];
 
 // Catégories de produits
@@ -34,7 +36,7 @@ export const DEFAULT_USERS = [
   { id: 2, siteId: 1, name: 'Caissier 1', pin: '0001', role: 'caissier', active: true },
   { id: 3, siteId: 1, name: 'Serveur 1', pin: '0002', role: 'serveur', active: true },
   { id: 4, siteId: 2, name: 'Admin Oasis', pin: '1234', role: 'admin', active: true },
-  { id: 99, siteId: 0, name: 'SUPER ADMIN', pin: '8888', role: 'superadmin', active: true }, // Code Secret SuperAdmin
+  { id: 99, siteId: 0, name: 'SUPER ADMIN', pin: SUPER_ADMIN_CODE, role: 'superadmin', active: true },
 ];
 
 export const PAYMENT_METHODS = [
@@ -52,6 +54,7 @@ export const formatFCFA = (amount) => {
 };
 
 export default {
+  SUPER_ADMIN_CODE,
   INITIAL_SITES,
   PRODUCT_CATEGORIES,
   DEFAULT_PRODUCTS,
