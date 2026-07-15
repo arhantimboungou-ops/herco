@@ -8,3 +8,4 @@ export { default as CashierScreen } from './CashierScreen';
 export { default as ServerScreen } from './ServerScreen';
 export { default as AdminDashboard } from './AdminDashboard';
 export { default as InventoryScreen } from './InventoryScreen';
+export { default as SuperAdminScreen } from './SuperAdminScreen';
